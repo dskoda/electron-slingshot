@@ -27,7 +27,7 @@ export const LEVELS: LevelDefinition[] = [
     hint: "The downward E-field curves your path. Aim higher than the target!",
     learningObjective: "Uniform electric fields create constant acceleration, like gravity.",
     launchPoint: { x: 3, y: 15 },
-    target: { x: 27, y: 10, radius: 1.5 },
+    target: { x: 27, y: 8, radius: 1.3 },
     maxShots: 5,
     sources: [
       {
@@ -77,7 +77,17 @@ export const LEVELS: LevelDefinition[] = [
       {
         type: 'point_charge',
         position: { x: 15, y: 10 },
-        charge: 0.005, // Positive charge attracts electron
+        charge: 0.005,
+      },
+      {
+        type: 'point_charge',
+        position: { x: 15, y: 20 },
+        charge: 0.005,
+      },
+      {
+        type: 'point_charge',
+        position: { x: 15, y: 0 },
+        charge: 0.005,
       },
     ],
     obstacles: [],
@@ -112,12 +122,13 @@ export const LEVELS: LevelDefinition[] = [
     hint: "Each charge contributes to the total field - watch for superposition effects!",
     learningObjective: "Electric fields superpose - the total field is the sum of all sources.",
     launchPoint: { x: 3, y: 10 },
-    target: { x: 27, y: 15, radius: 1.2 },
+    target: { x: 27, y: 12, radius: 1.1 },
     maxShots: 6,
     sources: [
       { type: 'point_charge', position: { x: 10, y: 6 }, charge: -0.002 },
       { type: 'point_charge', position: { x: 10, y: 14 }, charge: -0.002 },
       { type: 'point_charge', position: { x: 20, y: 10 }, charge: 0.0015 },
+      { type: 'point_charge', position: { x: 18, y: 8 }, charge: 0.0015 },
       { type: 'point_charge', position: { x: 18, y: 17 }, charge: -0.0015 },
       { type: 'point_charge', position: { x: 24, y: 18 }, charge: 0.0015 },
     ],
@@ -161,9 +172,14 @@ export const LEVELS: LevelDefinition[] = [
         region: { x: 0, y: 0, width: 10, height: 20 },
       },
       {
+        type: 'uniform_E',
+        field: { x: -0.2, y: 0.0 },
+        region: { x: 10.0, y: 0, width: 5, height: 6 },
+      },
+      {
         type: 'B_region',
         region: { x: 15, y: 0, width: 15, height: 20 },
-        Bz: 0.01,
+        Bz: -0.01,
       },
     ],
     obstacles: [],
@@ -182,8 +198,8 @@ export const LEVELS: LevelDefinition[] = [
     sources: [
       {
         type: 'line_charge',
-        start: { x: 15, y: 5 },
-        end: { x: 15, y: 15 },
+        start: { x: 15, y: 2 },
+        end: { x: 15, y: 12 },
         chargeDensity: -0.0008,
         segments: 15,
       },
@@ -200,11 +216,11 @@ export const LEVELS: LevelDefinition[] = [
   {
     id: 10,
     name: "Master Challenge",
-    description: "Everything you've learned! Navigate the ultimate obstacle course.",
-    hint: "Use superposition thinking - predict how each field affects your path!",
+    description: "Navigate the ultimate obstacle course.",
+    hint: "Think about superposition, magnetic fields, and so on. Plan carefully.",
     learningObjective: "Combine all concepts: point charges, dipoles, line charges, and magnetic regions.",
     launchPoint: { x: 3, y: 10 },
-    target: { x: 27, y: 16, radius: 1.0 },
+    target: { x: 27, y: 15, radius: 1.0 },
     maxShots: 8,
     sources: [
       { type: 'point_charge', position: { x: 8, y: 5 }, charge: -0.002 },
@@ -212,13 +228,25 @@ export const LEVELS: LevelDefinition[] = [
       {
         type: 'B_region',
         region: { x: 12, y: 5, width: 6, height: 10 },
+        Bz: 0.01,
+      },
+      {
+        type: 'B_region',
+        region: { x: 12, y: 15, width: 6, height: 10 },
         Bz: -0.01,
       },
       { type: 'point_charge', position: { x: 22, y: 10 }, charge: -0.001 },
       {
         type: 'uniform_E',
-        field: { x: 0, y: -0.04 },
-        region: { x: 20, y: 12, width: 10, height: 8 },
+        field: { x: -0.05, y: -0.1 },
+        region: { x: 22, y: 6, width: 8, height: 12 },
+      },
+      {
+        type: 'line_charge',
+        start: { x: 20, y: 4 },
+        end: { x: 30, y: 4 },
+        chargeDensity: 0.0008,
+        segments: 10,
       },
     ],
     obstacles: [],

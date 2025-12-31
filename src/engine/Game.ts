@@ -189,6 +189,11 @@ export class Game {
     // Draw launch point
     this.renderer.drawLaunchPoint(this.currentLevel.launchPoint);
     
+    // Draw instruction message for level 1
+    if (this.currentLevel.id === 1) {
+      this.renderer.drawInstructionMessage('Click and drag to aim and shoot the electron');
+    }
+    
     // Draw aiming vector when dragging
     if (this.state === 'aiming') {
       const inputState = this.input.getState();
@@ -251,6 +256,10 @@ export class Game {
     this.state = 'aiming';
     this.renderer.clearFieldCache();
     
+    // Reset render options when changing levels
+    this.renderOptions.showFieldVectors = false;
+    this.renderOptions.showTrajectoryPreview = false;
+    
     this.onLevelChange?.(level);
     this.onShotsChange?.(this.shotsRemaining);
     this.onTriesChange?.(this.tries);
@@ -258,10 +267,13 @@ export class Game {
   }
 
   /**
-   * Reset current level
+   * Reset current level (preserves tries count)
    */
   resetLevel(): void {
+    const currentTries = this.tries;
     this.loadLevel(this.currentLevelIndex);
+    this.tries = currentTries;
+    this.onTriesChange?.(this.tries);
   }
 
   /**

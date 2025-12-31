@@ -577,4 +577,30 @@ export class Renderer {
     
     return { speedPercent, angleDegrees };
   }
+
+  /**
+   * Draw instruction message (for level 1)
+   */
+  drawInstructionMessage(message: string): void {
+    const ctx = this.ctx;
+    const centerX = this.config.canvasWidth / 2;
+    const centerY = this.config.canvasHeight / 2 - 150;
+
+    // Draw semi-transparent background
+    ctx.fillStyle = 'rgba(10, 10, 26, 0.7)';
+    ctx.fillRect(0, centerY - 60, this.config.canvasWidth, 120);
+
+    // Draw the message with large font
+    ctx.fillStyle = '#00d4ff';
+    ctx.font = 'bold 24px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(message, centerX, centerY);
+
+    // Add a subtle glow effect
+    ctx.shadowColor = '#00d4ff';
+    ctx.shadowBlur = 15;
+    ctx.fillText(message, centerX, centerY);
+    ctx.shadowBlur = 0;
+  }
 }

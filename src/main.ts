@@ -30,13 +30,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const screenshotBtn = document.getElementById('screenshot-btn') as HTMLButtonElement;
   const toggleFieldBtn = document.getElementById('toggle-field') as HTMLButtonElement;
   const togglePreviewBtn = document.getElementById('toggle-preview') as HTMLButtonElement;
-  const hintBtn = document.getElementById('hint-btn') as HTMLButtonElement;
   const resetBtn = document.getElementById('reset-btn') as HTMLButtonElement;
 
   // Hide helper buttons initially (unless DEBUG_MODE is on)
   if (!DEBUG_MODE) {
     toggleFieldBtn.style.display = 'none';
     togglePreviewBtn.style.display = 'none';
+    levelSelectorEl.disabled = true;
   }
 
   // Update button visibility based on tries
@@ -63,6 +63,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Reset tries display and hide helper buttons
     triesCountEl.textContent = '0';
     updateHelperButtonVisibility(0);
+    
+    // Reset toggle button states
+    toggleFieldBtn.classList.remove('active');
+    togglePreviewBtn.classList.remove('active');
   });
 
   // Update UI when aiming
@@ -148,12 +152,6 @@ document.addEventListener('DOMContentLoaded', () => {
       // Show the overlay again
       messageOverlay.style.display = '';
     });
-  });
-
-  // Hint button
-  hintBtn.addEventListener('click', () => {
-    const level = game.getCurrentLevel();
-    alert(`💡 Hint for "${level.name}":\n\n${level.hint}\n\n📚 Learning: ${level.learningObjective}`);
   });
 
   // Reset button

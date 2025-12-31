@@ -5,7 +5,7 @@
 import { GameConfig, RenderOptions } from './types';
 
 // Set to true to always show "Show Fields" and "Show Preview" buttons
-export const DEBUG_MODE = true;
+export const DEBUG_MODE = false;
 
 export const DEFAULT_CONFIG: GameConfig = {
   canvasWidth: 900,
