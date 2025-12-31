@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Charge Challenge - Remembering Electrostatics with a Game</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #e0e0e0;
+        overflow: hidden;
+      }
+
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        color: #00d4ff;
+        text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+      }
+
+      .subtitle {
+        font-size: 0.9rem;
+        color: #888;
+        margin-bottom: 1rem;
+      }
+
+      #game-container {
+        position: relative;
+        border: 2px solid #00d4ff;
+        border-radius: 8px;
+        box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        overflow: hidden;
+      }
+
+      #game-canvas {
+        display: block;
+        background: #0a0a1a;
+      }
+
+      #ui-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      #hud {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        pointer-events: auto;
+      }
+
+      .hud-panel {
+        background: rgba(0, 0, 0, 0.7);
+        padding: 10px 15px;
+        border-radius: 5px;
+        border: 1px solid rgba(0, 212, 255, 0.3);
+      }
+
+      .hud-panel h3 {
+        color: #00d4ff;
+        font-size: 0.8rem;
+        margin-bottom: 5px;
+      }
+
+      .hud-panel p {
+        font-size: 0.75rem;
+        line-height: 1.4;
+      }
+
+      #controls {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        pointer-events: auto;
+      }
+
+      .btn {
+        background: rgba(0, 212, 255, 0.2);
+        border: 1px solid #00d4ff;
+        color: #00d4ff;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        transition: all 0.2s;
+      }
+
+      .btn:hover {
+        background: rgba(0, 212, 255, 0.4);
+      }
+
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .btn-group {
+        display: flex;
+        gap: 8px;
+      }
+
+      #message-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        pointer-events: auto;
+        display: none;
+        background: rgba(10, 10, 26, 0.05);
+        padding: 2rem 3rem;
+        border-radius: 12px;
+        backdrop-filter: blur(2px);
+      }
+
+      #message-overlay.visible {
+        display: block;
+      }
+
+      #message-overlay h2 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+
+      #message-overlay.win h2 {
+        color: #00ff88;
+        text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+      }
+
+      #message-overlay.fail h2 {
+        color: #ff4444;
+        text-shadow: 0 0 20px rgba(255, 68, 68, 0.5);
+      }
+
+      .toggle-btn {
+        background: rgba(100, 100, 100, 0.3);
+        border: 1px solid #666;
+      }
+
+      .toggle-btn.active {
+        background: rgba(0, 212, 255, 0.3);
+        border-color: #00d4ff;
+      }
+
+      #instructions {
+        margin-top: 1rem;
+        font-size: 0.8rem;
+        color: #666;
+        text-align: center;
+      }
+
+      #instructions span {
+        color: #00d4ff;
+      }
+
+      #level-selector {
+        background: rgba(0, 0, 0, 0.7);
+        border: 1px solid #00d4ff;
+        color: #00d4ff;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        margin-left: 10px;
+      }
+
+      #level-selector option {
+        background: #1a1a2e;
+        color: #e0e0e0;
+      }
+
+      .level-header {
+        display: flex;
+        align-items: center;
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/index-DqoXedJX.js"></script>
+  </head>
+  <body>
+    <h1>⚡ Charge Challenge</h1>
+    <p class="subtitle">Remember electrostatics by guiding electrons to targets!</p>
+
+    <div id="game-container">
+      <canvas id="game-canvas" width="900" height="600"></canvas>
+      
+      <div id="ui-overlay">
+        <div id="hud">
+          <div class="hud-panel" id="level-info">
+            <div class="level-header">
+              <h3>Level <span id="level-number">1</span></h3>
+              <select id="level-selector">
+                <option value="1">1 - Ballistics Baseline</option>
+                <option value="2">2 - Electric Gravity</option>
+                <option value="3">3 - Deflection Zone</option>
+                <option value="4">4 - Attractive Well</option>
+                <option value="5">5 - Dipole Gate</option>
+                <option value="6">6 - Charge Maze</option>
+                <option value="7">7 - Magnetic Deflection</option>
+                <option value="8">8 - E × B Drift</option>
+                <option value="9">9 - Charged Rod</option>
+                <option value="10">10 - Master Challenge</option>
+              </select>
+            </div>
+            <p id="level-title">Ballistics Baseline</p>
+          </div>
+          <div class="hud-panel" id="stats">
+            <h3>Tries: <span id="tries-count">0</span></h3>
+            <p id="aim-info" style="color: #00ff88; font-size: 1rem; margin-top: 5px;">Speed: --% | Angle: --°</p>
+          </div>
+        </div>
+
+        <div id="message-overlay">
+          <h2 id="message-text">Level Complete!</h2>
+          <p id="message-subtext"></p>
+          <div class="btn-group" style="justify-content: center; margin-top: 1rem;">
+            <button class="btn" id="screenshot-btn">📸 Screenshot</button>
+            <button class="btn" id="message-btn">Next Level</button>
+          </div>
+        </div>
+
+        <div id="controls">
+          <div class="btn-group">
+            <button class="btn toggle-btn" id="toggle-field">Show Fields</button>
+            <button class="btn toggle-btn" id="toggle-preview">Show Preview</button>
+          </div>
+          <div class="btn-group">
+            <button class="btn" id="reset-btn">🔄 Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p id="instructions">
+      <span>Click and drag anywhere</span> in the direction you want to shoot • 
+      <span>Release</span> to fire • Unlimited shots!
+    </p>
+
+  </body>
+</html>

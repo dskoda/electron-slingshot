@@ -12,8 +12,6 @@ import { getLevel, getLevelCount } from '../game/levels';
 import { simulateTrajectory } from '../physics/Integrator';
 
 export class Game {
-  private _canvas: HTMLCanvasElement;
-  private _ctx: CanvasRenderingContext2D;
   private config: GameConfig;
   private renderOptions: RenderOptions;
   
@@ -38,10 +36,8 @@ export class Game {
   private onTriesChange?: (tries: number) => void;
 
   constructor(canvas: HTMLCanvasElement) {
-    this._canvas = canvas;
     const ctx = canvas.getContext('2d');
     if (!ctx) throw new Error('Could not get 2D context');
-    this._ctx = ctx;
     
     this.config = { ...DEFAULT_CONFIG };
     this.renderOptions = { ...DEFAULT_RENDER_OPTIONS };
