@@ -32,16 +32,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const togglePreviewBtn = document.getElementById('toggle-preview') as HTMLButtonElement;
   const resetBtn = document.getElementById('reset-btn') as HTMLButtonElement;
 
-  // Hide helper buttons initially (unless DEBUG_MODE is on)
-  if (!DEBUG_MODE) {
+  // Local debug mode that can be enabled when player finishes the game
+  let debugMode = DEBUG_MODE;
+
+  // Hide helper buttons initially (unless debugMode is on)
+  if (!debugMode) {
     toggleFieldBtn.style.display = 'none';
     togglePreviewBtn.style.display = 'none';
     levelSelectorEl.disabled = true;
   }
 
+  // Enable debug mode (called when player finishes all levels)
+  function enableDebugMode(): void {
+    debugMode = true;
+    levelSelectorEl.disabled = false;
+    toggleFieldBtn.style.display = '';
+    togglePreviewBtn.style.display = '';
+  }
+
   // Update button visibility based on tries
   function updateHelperButtonVisibility(tries: number): void {
-    if (DEBUG_MODE) {
+    if (debugMode) {
       // Always show buttons in debug mode
       toggleFieldBtn.style.display = '';
       togglePreviewBtn.style.display = '';
@@ -101,8 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
           game.nextLevel();
         };
       } else {
-        messageSubtext.textContent = 'Congratulations! You\'ve mastered electrostatics!';
+        messageSubtext.textContent = 'Congratulations! Hope you have a good intuition about electrostatics now!';
         messageBtn.textContent = 'Play Again';
+        // Enable debug mode so player can freely replay any level
+        enableDebugMode();
         messageBtn.onclick = () => {
           game.loadLevel(1);
         };
